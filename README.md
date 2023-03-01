@@ -32,7 +32,7 @@ Using Laravel and VueJS, create an application which shows the weather for a set
   - Make sure you are in the `/var/www/html` path
   - Install php dependencies: `composer install`
   - Setup app key: `php artisan key:generate`
-  - Migrate database: `php artisan migrate` 
+  - Migrate database: `   ` 
   - Seed database: `php artisan db:seed`
   - Run tests: `php artisan test`
 - Visit api: `http://localhost`
