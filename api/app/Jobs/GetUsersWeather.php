@@ -23,7 +23,7 @@ class GetUsersWeather implements ShouldQueue
     {
         //Doing some setup.
         //Getting all the users.
-        $this->users=\App\Models\User::without('weather_data')->get();
+        $this->users=\App\Models\User::get();
         if(!$this->users->count()){
             return;
         }
@@ -64,6 +64,7 @@ class GetUsersWeather implements ShouldQueue
             if(!$user_weather_data['status']){
                 $new_weather_data["user_id"]=$user['id'];
                 $new_weather_data["status"]=false;
+                $new_weather_data['updated_at']=date('Y-m-d H:i:s');
                 $new_weather_data['error_code']=$user_weather_data['response']['error']['code'];
                 $new_weather_data['error_message']=$user_weather_data['response']['error']['message'];
                 $weather_data=UsersWeather::updateOrInsert(['user_id'=>$user['id']],$new_weather_data);
