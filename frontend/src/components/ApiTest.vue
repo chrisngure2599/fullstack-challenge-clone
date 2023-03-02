@@ -15,7 +15,6 @@ export default {
   },
   computed: {},
   methods: {
-    weather_details(user_weather_data){
     weatherDetails(user_weather_data) {
       this.currentUserDetails = user_weather_data;
     },
