@@ -45,9 +45,8 @@ class GetUsersWeather implements ShouldQueue
     }
 
     private function getUserWeather($user) //Sending a request for User`s weather data
-    {  
-       echo "Working on user $user->email"; 
-       $api_key="eea48d47a98a4e14b0a152013230103";
+    {   
+       $api_key= env('WEATHERAPI_API_KEY');
        $response = Http::get('http://api.weatherapi.com/v1/current.json', 
             [
                 'key' => $api_key,
@@ -81,7 +80,7 @@ class GetUsersWeather implements ShouldQueue
             $new_weather_data["condition_icon"]=$user_weather_data['response']['current']['condition']['icon'];
             $new_weather_data["condition_code"]=$user_weather_data['response']['current']['condition']['code'];
             $new_weather_data["wind_mph"]=$user_weather_data['response']['current']['wind_mph'];
-            $new_weather_data["wind_kph"]=$user_weather_data['response']['current']['wind_mph'];
+            $new_weather_data["wind_kph"]=$user_weather_data['response']['current']['wind_kph'];
             $new_weather_data["wind_degree"]=$user_weather_data['response']['current']['wind_degree'];
             $new_weather_data["wind_dir"]=$user_weather_data['response']['current']['wind_dir'];
             $new_weather_data["pressure_mb"]=$user_weather_data['response']['current']['pressure_mb'];
