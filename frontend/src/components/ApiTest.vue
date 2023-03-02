@@ -1,8 +1,13 @@
 <script>
+import WeatherDetailsModal from "@/components/WeatherDetailsModal.vue";
 export default {
   data: () => ({
-    apiResponse: null
+    apiResponse: null,
+    currentUserDetails:null
   }),
+  components: {
+    WeatherDetailsModal
+  },
 
   created() {
     this.fetchData()
@@ -11,14 +16,8 @@ export default {
     
   },
   methods: {
-    weather_data(user_weather_data){
-      if(user_weather_data!==null){
-        return user_weather_data
-        return Object.entries(user_weather_data);
-
-      }else{
-        return "N/A";
-      }
+    weather_details(user_weather_data){
+      this.currentUserDetails=user_weather_data;
     },
     async fetchData() {
       const url = 'http://localhost:8000'
@@ -54,10 +53,12 @@ export default {
             <th>
               Weather Summary.
             </th>
+            <th>Lat</th>
+            <th>Long</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in apiResponse.users" title="Click for more" >
+          <tr @click="weather_details(user)" v-for="user in apiResponse.users" title="Click for more" data-bs-toggle="modal" data-bs-target="#myModal" >
               <td>
                 {{ user.id }}
               </td>
@@ -68,11 +69,30 @@ export default {
                 {{ user.email }}
               </td>
               <td>
-               <img :src="weather_data(user.weather_data).condition_icon" alt=""> 
+                <div v-if="user.weather_data.status" >
+                  <img :src="user.weather_data.condition_icon" alt=""> 
+                </div>
+                <div v-else :title="user.weather_data.error_message"  class="text-danger" >
+                
+                  Error!
+                </div>
+              </td>
+              <td>
+                {{ user.longitude }}
+              </td>
+              <td>
+                {{ user.latitude }}
               </td>
           </tr>
         </tbody>
       </table>
+      <!-- The Modal -->
+<div class="modal fade" id="myModal" >
+  <div class="modal-dialog">
+    <div  class="modal-content">
+      <WeatherDetailsModal  :weather_data=currentUserDetails ></WeatherDetailsModal >
+    </div>
+  </div></div>
     </div>
     <div v-else >
       <h1>No Users found</h1>
