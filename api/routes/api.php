@@ -16,10 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $users=new \App\Models\User;
-
-    return response()->json([
-        'message' => 'all systems are a go',
-        'users' =>$users->with('weather_data')->get()
-        ,
-    ]);
+    if($users){
+        return response()->json([
+            'message' => 'all systems are a go',
+            'users' =>$users->with('weather_data')->get()
+        ],200);
+    }else{
+        return response()->json(['message' => 'No any users yet.',],204);
+    }
+    
 });

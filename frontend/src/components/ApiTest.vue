@@ -3,6 +3,7 @@ import WeatherDetailsModal from "@/components/WeatherDetailsModal.vue";
 export default {
   data: () => ({
     apiResponse: null,
+    statusCode:null,
     currentUserDetails:null
   }),
   components: {
@@ -21,19 +22,35 @@ export default {
     },
     async fetchData() {
       const url = 'http://localhost:8000'
-      this.apiResponse = await (await fetch(url)).json()
+      const response = await fetch(url)
+      
+      this.statusCode = response.status // Get the status code
+      if(this.statusCode==200){
+        this.apiResponse = await response.json()
+      }
+      
+
     }
   }
 }
 </script>
 
 <template>
-  <div v-if="!apiResponse">
+  <div v-if="!statusCode">
     Loading the data.....
   </div>
+  <div v-if="statusCode==204">
+      <h1>No Users found</h1>
+  </div>
+
+  <div v-if="statusCode>=500 " >
+    <h1>Internal error please try again later</h1>
+  </div>
+
+  
 
   <div v-if="apiResponse">
-    <h1>Users.</h1>
+    <h1>Users ({{ apiResponse.users.length }}).</h1>
     <code>
       <!-- {{ apiResponse }} -->
     <!-- Looping through the Users -->
