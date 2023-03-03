@@ -35,6 +35,12 @@ Using Laravel and VueJS, create an application which shows the weather for a set
   - Migrate database: `   ` 
   - Seed database: `php artisan db:seed`
   - Run tests: `php artisan test`
+  - Add schedule to your cron tab 
+  `* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1`.
+ Or run
+ php artisan schedule:run
+
+
 - Visit api: `http://localhost`
 
 ### Frontend
