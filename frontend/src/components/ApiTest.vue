@@ -1,40 +1,54 @@
-<script>
+<script lang="ts">
 import WeatherDetailsModal from "@/components/WeatherDetailsModal.vue";
+
+interface ApiResponse {
+  users: Array<{
+    id: number;
+    name: string;
+    email: string;
+    longitude: number;
+    latitude: number;
+    weather_data: {
+      status: string;
+      condition_icon: string;
+      error_message: string;
+      updated_at: string;
+    }
+  }>
+}
+
 export default {
-  data: () => ({
-    apiResponse: null,
-    statusCode: null,
-    currentUserDetails: null,
-  }),
+  data() {
+    return {
+      apiResponse: null as ApiResponse | null,
+      statusCode: null as number | null,
+      currentUserDetails: null as any,
+    }
+  },
   components: {
     WeatherDetailsModal,
   },
-
   created() {
     this.fetchData();
   },
-  computed: {
-    
-  },
   methods: {
-    convertDate(date){
-      const isoDateString = date;
+    convertDate(isoDateString: string) {
       const newDate = new Date(isoDateString);
-      const humanReadableDate = newDate.toLocaleString(); // Get human-readable date format
-      console.log(humanReadableDate); 
-      return humanReadableDate;
+      return newDate.toLocaleString();
     },
-    weatherDetails(user_weather_data) {
+    weatherDetails(user_weather_data: any) {
       this.currentUserDetails = user_weather_data;
     },
-
     async fetchData() {
-      const url = "http://localhost:8000";
-      const response = await fetch(url);
-
-      this.statusCode = response.status; // Get the status code
-      if (this.statusCode == 200) {
-        this.apiResponse = await response.json();
+      const url = "http://localhost:8080";
+      try {
+        const response = await fetch(url);
+        this.statusCode = response.status;
+        if (this.statusCode === 200) {
+          this.apiResponse = await response.json();
+        }
+      } catch(error: any) {
+        alert("Error"+error.message)
       }
     },
   },
@@ -47,15 +61,13 @@ export default {
     <h1>No Users found</h1>
   </div>
 
-  <div v-if="statusCode >= 500">
+  <div v-if="Number(statusCode) >= 500">
     <h1>Internal error please try again later</h1>
   </div>
 
   <div v-if="apiResponse">
     <h1>Users ({{ apiResponse.users.length }}).</h1>
     <code>
-      <!-- {{ apiResponse }} -->
-      <!-- Looping through the Users -->
       <div v-if="apiResponse.users">
         <table class="table table-striped table-hover">
           <thead>

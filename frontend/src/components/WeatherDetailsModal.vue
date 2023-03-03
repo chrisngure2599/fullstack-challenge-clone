@@ -1,7 +1,14 @@
-<script>
-export default {
-  props: ["weather_data"],
-};
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  props: {
+    weather_data: {
+      type: Object,
+      required: true,
+    },
+  },
+});
 </script>
 <template>
   <div>
