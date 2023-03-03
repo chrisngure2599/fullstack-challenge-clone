@@ -9,7 +9,7 @@ class UsersWeather extends Model
 {
     use HasFactory;
     protected $fillable = ['*'];
-    protected $table="user_weather";
+    protected $table="users_weather";
 
     public function user()
     {

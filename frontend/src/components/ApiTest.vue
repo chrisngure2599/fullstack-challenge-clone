@@ -47,8 +47,9 @@ export default {
         if (this.statusCode === 200) {
           this.apiResponse = await response.json();
         }
+        console.log(this.apiResponse);
       } catch(error: any) {
-        alert("Error"+error.message)
+        alert("Error "+error.message)
       }
     },
   },
@@ -100,12 +101,12 @@ export default {
                 {{ user.email }}
               </td>
               <td>
-                <div v-if="user.weather_data.status">
-                  <img :src="user.weather_data.condition_icon" alt="" />
+                <div v-if="user.weather_data?.status">
+                  <img :src="user.weather_data?.condition_icon" alt="" />
                 </div>
                 <div
                   v-else
-                  :title="user.weather_data.error_message"
+                  :title="user.weather_data?.error_message"
                   class="text-danger"
                 >
                   Error!
@@ -118,7 +119,7 @@ export default {
                 {{ user.latitude }}
               </td>
               <td>
-                {{ convertDate(user.weather_data.updated_at) }}
+                {{ convertDate(user.weather_data?.updated_at) }}
               </td>
             </tr>
           </tbody>
@@ -135,7 +136,7 @@ export default {
         </div>
       </div>
       <div v-else>
-        <h1>No Users found</h1>
+        <h1 align="center" class="text-danger">No Users found</h1>
       </div>
     </code>
   </div>

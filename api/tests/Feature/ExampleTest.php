@@ -7,6 +7,7 @@ use App\Models\UsersWeather;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Jobs\GetUsersWeather;
+use DB;
 
 class ExampleTest extends TestCase
 {
@@ -20,16 +21,13 @@ class ExampleTest extends TestCase
     public function test_the_application_returns_a_successful_response()
     {
         $response = $this->get('/');
-        $response->assertStatus(204);// Returning empty if no Users.
+        $response->assertStatus(204);
 
         User::factory(20)->create();
         $response = $this->get('/');
 
         $response->assertStatus(200);
-
-       
-        
-
+        DB::rollBack();
     }
 
     public function test_database_works()
@@ -37,14 +35,18 @@ class ExampleTest extends TestCase
         User::factory(20)->create();
 
         $this->assertEquals(20, User::all()->count());
+        DB::rollBack();
     }
     
     //Test the Job if works.
     public function test_job_get_users_weather_works()
     {
-        $this->assertEquals(0, UsersWeather::get()->count()); //Making sure no data before
+        $this->assertEquals(0, UsersWeather::count()); //Making sure no data before
+
         User::factory(2)->create();
-        dispatch(new GetUsersWeather);
-        $this->assertEquals(2, UsersWeather::get()->count());        
+        $job = new GetUsersWeather;
+        dispatch($job);
+
+        $this->assertDatabaseCount('users_weather', 2);
     }
 }
