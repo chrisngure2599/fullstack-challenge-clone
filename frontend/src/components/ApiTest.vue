@@ -13,8 +13,17 @@ export default {
   created() {
     this.fetchData();
   },
-  computed: {},
+  computed: {
+    
+  },
   methods: {
+    convertDate(date){
+      const isoDateString = date;
+      const newDate = new Date(isoDateString);
+      const humanReadableDate = newDate.toLocaleString(); // Get human-readable date format
+      console.log(humanReadableDate); 
+      return humanReadableDate;
+    },
     weatherDetails(user_weather_data) {
       this.currentUserDetails = user_weather_data;
     },
@@ -97,7 +106,7 @@ export default {
                 {{ user.latitude }}
               </td>
               <td>
-                {{ Date(user.updated_at).toLocaleString() }}
+                {{ convertDate(user.weather_data.updated_at) }}
               </td>
             </tr>
           </tbody>
